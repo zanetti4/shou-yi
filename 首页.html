@@ -1,0 +1,781 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<meta name="renderer" content="webkit">
+<title>首页</title>
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/style.css" />
+<script type="text/javascript" src="js/cssrefresh.js"></script>
+<script type="text/javascript" src="js/offlights.js"></script>
+<script type="text/javascript" src="js/javascript-sy.js"></script>
+<!--[if lte IE 6]> 
+<script src="http://letskillie6.googlecode.com/svn/trunk/letskillie6.zh_CN.pack.js"></script>
+<![endif]-->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.js"></script>
+<![endif]-->
+<style type="text/css">
+body {
+  behavior: url("css/csshover.htc");
+}
+</style>
+<script type="text/javascript">
+myAddEvent(window,'load',function(){
+  var oDivPlay=document.getElementById('play');
+  var oDivSmB=getByClass(oDivPlay,'play-c-s-s')[0];
+  var oBtnSL=getByClass(oDivSmB,'play-sl')[0];
+  var oBtnSR=getByClass(oDivSmB,'play-sr')[0];
+  var oUlSmall=oDivSmB.getElementsByTagName('ul')[0];
+  var aLiSmall=oUlSmall.getElementsByTagName('li');
+  var aLiBig=oDivPlay.getElementsByTagName('ul')[0].getElementsByTagName('li');
+  var oAML=getByClass(oDivPlay,'play-m play-ml')[0];
+  var oAMR=getByClass(oDivPlay,'play-m play-mr')[0];
+  var oBtnL=getByClass(oDivPlay,'play-al')[0];
+  var oBtnR=getByClass(oDivPlay,'play-ar')[0];
+
+  var now=0;
+  var nowZindex=1602;
+
+  for(var i=0;i<aLiSmall.length;i++){
+    aLiSmall[i].index=i;
+    aLiSmall[i].onclick=function(){
+      if(this.index==now) return;
+      now=this.index;
+      tab();
+    };
+  };
+
+  function tab(){
+    aLiBig[now].style.zIndex=nowZindex++;
+    aLiBig[now].style.height=0;
+    startMove2(aLiBig[now],{height:245});
+
+    for(var i=0;i<aLiSmall.length;i++){
+      aLiSmall[i].className='';
+    };
+    aLiSmall[now].className='play-sa';
+  };
+
+  oAML.onmouseover=oBtnL.onmouseover=function(){
+    startMove2(oBtnL,{opacity:100});
+  };
+  oAML.onmouseout=oBtnL.onmouseout=function(){
+    startMove2(oBtnL,{opacity:0});
+  };
+  oAMR.onmouseover=oBtnR.onmouseover=function(){
+    startMove2(oBtnR,{opacity:100});
+  };
+  oAMR.onmouseout=oBtnR.onmouseout=function(){
+    startMove2(oBtnR,{opacity:0});
+  };
+
+  var smallMR=parseInt(getStyle(aLiSmall[0],'marginRight'));
+  var eachWidth=aLiSmall[0].offsetWidth+smallMR;
+
+  oBtnL.onclick=function(){
+    now--;
+
+    if(now==-1){
+      now=aLiSmall.length-1;
+      startMove2(oUlSmall,{left:-(now-3)*eachWidth+20});
+    }
+    else if(now==Math.abs((oUlSmall.offsetLeft-20)/eachWidth)-1){
+      startMove2(oUlSmall,{left:-now*eachWidth+20});
+    }
+
+    tab();
+  };
+
+  oBtnR.onclick=function(){
+    now++;
+
+    if(now==aLiSmall.length){
+      now=0;
+      startMove2(oUlSmall,{left:20});
+    }
+    else if(now==Math.abs((oUlSmall.offsetLeft-20)/eachWidth)+4){
+      startMove2(oUlSmall,{left:-(now-3)*eachWidth+20});
+    }
+
+    tab();
+  };
+
+  oBtnSR.onclick=function(){
+    var iLeftR=aLiSmall.length-4+(oUlSmall.offsetLeft-20)/eachWidth;
+
+    if(iLeftR<4){
+      startMove2(oUlSmall,{left:oUlSmall.offsetLeft-iLeftR*eachWidth});
+
+      if(now<aLiSmall.length-4){
+        now=aLiSmall.length-4;
+        tab();
+      }
+    }
+    else{
+      startMove2(oUlSmall,{left:oUlSmall.offsetLeft-4*eachWidth});
+      now=(oUlSmall.offsetLeft-20)/eachWidth;
+      tab();
+    }
+  };
+
+  oBtnSL.onclick=function(){
+    var iLeftL=Math.abs((oUlSmall.offsetLeft-20)/eachWidth);
+
+    if(iLeftL<4){
+      startMove2(oUlSmall,{left:oUlSmall.offsetLeft+iLeftL*eachWidth});
+
+      if(now>3){
+        now=3;
+        tab();
+      }
+    }
+    else{
+      startMove2(oUlSmall,{left:oUlSmall.offsetLeft+4*eachWidth});
+      now=Math.abs((oUlSmall.offsetLeft-20)/eachWidth)+3;
+      tab();
+    }
+  };
+
+  var oDivHL=document.getElementById('hotLab');
+  var oPBtn=getByClass(oDivHL,'content-s-l-btn')[0];
+  var oBtnRHL=oPBtn.getElementsByTagName('a')[1];
+  var oBtnLHL=oPBtn.getElementsByTagName('a')[0];
+  var oDivHLC=getByClass(oDivHL,'content-s-lc')[0];
+  var aPLabel=oDivHLC.getElementsByTagName('p');
+  var nowHL=0;
+
+  function tabHL(xNowHL){
+    startMove2(aPLabel[xNowHL],{opacity:0},function(){
+      aPLabel[xNowHL].style.display='none';
+      aPLabel[nowHL].style.cssText='display:block; opacity:0; filter:Alpha(Opacity=0);';
+      startMove2(aPLabel[nowHL],{opacity:100});
+    });
+  };
+
+  oBtnRHL.onclick=function(){
+    nowHL++;
+
+    if(nowHL==aPLabel.length){
+      nowHL=aPLabel.length-1;
+      return;
+    }
+    else{
+      tabHL(nowHL-1);
+    }
+  };
+
+  oBtnLHL.onclick=function(){
+    nowHL--;
+
+    if(nowHL<0){
+      nowHL=0;
+      return;
+    }
+    else{
+      tabHL(nowHL+1);
+    }
+  };
+
+  var oDivHT=document.getElementById('hotTop');
+  var aAHTLab=oDivHT.getElementsByTagName('p')[0].getElementsByTagName('a');
+  var aOlHT=oDivHT.children[1].getElementsByTagName('ol');
+
+  for(var i=0;i<aAHTLab.length;i++){
+    aAHTLab[i].index=i;
+    aAHTLab[i].onclick=function(){
+      for(var i=0;i<aAHTLab.length;i++){
+        aAHTLab[i].className='';
+        aOlHT[i].style.display='none';
+      };
+      this.className='content-s-h-ti-a';
+      aOlHT[this.index].style.display='block';
+    };
+  };
+});
+</script>
+</head>
+<body>
+<div class="top">
+  <div class="top-c">
+    <div class="top-d" id="topMenu">
+      <div class="top-d-e top-d-v">
+        <a href="javascript:;" class="top-d-e-vl" hidefocus="">看过</a>
+        <div class="top-d-e-v ks-hidden">
+          <ul>
+            <li class="ks-clear">
+              <span>100%</span>
+              <p class="ks-text-overflow"><a href="#">一周杯具傻缺搞笑奇趣盘点盘点一周杯具傻缺搞笑奇趣盘点盘点</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>6%</span>
+              <p class="ks-text-overflow"><a href="#">LCS 欧洲春季赛W7D2精彩回顾</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>78%</span>
+              <p class="ks-text-overflow"><a href="#">一周杯具傻缺搞笑奇趣盘点盘点</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>100%</span>
+              <p class="ks-text-overflow"><a href="#">LCS 欧洲春季赛W7D2精彩回顾</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>100%</span>
+              <p class="ks-text-overflow"><a href="#">一周杯具傻缺搞笑奇趣盘点盘点一周杯具傻缺搞笑奇趣盘点盘点</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>6%</span>
+              <p class="ks-text-overflow"><a href="#">LCS 欧洲春季赛W7D2精彩回顾</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>78%</span>
+              <p class="ks-text-overflow"><a href="#">一周杯具傻缺搞笑奇趣盘点盘点</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>100%</span>
+              <p class="ks-text-overflow"><a href="#">LCS 欧洲春季赛W7D2精彩回顾</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>78%</span>
+              <p class="ks-text-overflow"><a href="#">一周杯具傻缺搞笑奇趣盘点盘点</a></p>
+            </li>
+            <li class="ks-clear">
+              <span>100%</span>
+              <p class="ks-text-overflow"><a href="#">LCS 欧洲春季赛W7D2精彩回顾</a></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="top-d-e">
+        <a href="首页-上传视频.html" class="top-d-e-u">上传</a>
+      </div>
+      <!--[if !IE]>注册登录开始<![endif]-->
+      <div class="top-d-e ks-hidden">
+        <i class="top-d-e-rl"></i><br>
+        <a href="首页-注册.html">注册</a> | <a href="首页-登录.html">登录</a>
+      </div>
+      <!--[if !IE]>注册登录结束<![endif]-->
+      <!--[if !IE]>QQ登录开始<![endif]-->
+      <div class="top-d-e ks-hidden">
+        <a href="#" class="top-d-e-q">QQ登录</a>
+      </div>
+      <!--[if !IE]>QQ登录结束<![endif]-->
+      <!--[if !IE]>乐学购开始<![endif]-->
+      <div class="top-d-e">
+        <a href="#" class="top-d-e-b">乐学购</a>
+      </div>
+      <!--[if !IE]>乐学购结束<![endif]-->
+      <!--[if !IE]>用户开始<![endif]-->
+      <div class="top-d-e pr">
+        <a href="#" class="top-d-e-us ks-text-overflow" hidefocus="">酸溜溜psR58b5</a>
+        <!--[if !IE]>购物车开始<![endif]-->
+        <div class="top-d-e-c ks-hidden">
+          <a href="首页-购物车.html">购物车</a>
+          <a href="#">退出</a>
+        </div>
+        <!--[if !IE]>购物车结束<![endif]-->
+      </div>
+      <!--[if !IE]>用户结束<![endif]-->
+    </div>
+    <div class="top-c-f">
+    人人都是动画高手！
+      <div class="top-c-f-f">
+        <div class="top-c-f-d" id="sear">
+          <span>作品</span><i class="top-c-f-d-a"></i>
+          <!--菜单开始-->
+          <div class="ks-hidden">
+            <a href="javascript:;">教程</a>
+            <a href="javascript:;">作品</a>
+          </div>
+          <!--菜单结束-->
+        </div>
+        <input name="" type="text" class="txt">
+        <a href="首页-顶部导航搜索结果页.html" class="top-c-f-f-btn"></a>
+      </div>
+    </div>
+    <div class="top-c-logow"><a href="index.html" class="ks-hide-text top-c-logo">校园动画</a></div>
+  </div>
+</div>
+<div class="nav">
+  <div class="nav-c">
+    <a href="首页.html" class="nav-c-ti nav-c-tiactive">首页</a>
+    <a href="首页-动画课堂频道页.html" class="nav-c-ti">动画课堂</a>
+    <a href="首页-趣味生活频道页.html" class="nav-c-ti">趣味生活</a>
+    <a href="首页-教程与认证.html" class="nav-c-ti">教程与认证</a>
+    <div class="nav-c-d" id="carMake">
+      <span>动画制作神器</span><i class="nav-c-d-a"></i>
+      <!--菜单开始-->
+      <div class="ks-hidden">
+        <a href="首页-iclone-独家特色.html">iclone制作器</a>
+        <a href="首页-crazytalk-独家特色.html">Crazytalk制作器</a>
+      </div>
+      <!--菜单结束-->
+    </div>
+  </div>
+</div>
+<div class="play">
+  <div class="play-c">
+    <!--视频开始-->
+    <div class="play-c-v" id="a1"></div>
+    <script type="text/javascript" src="ckplayer/ckplayer.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    var flashvars={
+      f:'http://movie.ks.js.cn/flv/other/1_0.flv',//视频地址
+      a:'',//调用时的参数，只有当s>0的时候有效
+      s:'0',//调用方式，0=普通方法（f=视频地址），1=网址形式,2=xml形式，3=swf形式(s>0时f=网址，配合a来完成对地址的组装)
+      c:'0',//是否读取文本配置,0不是，1是
+      x:'',//调用配置文件路径，只有在c=1时使用。默认为空调用的是ckplayer.xml
+      i:'',//初始图片地址
+      d:'',//暂停时播放的广告，swf/图片,多个用竖线隔开，图片要加链接地址，没有的时候留空就行
+      u:'',//暂停时如果是图片的话，加个链接地址
+      l:'',//前置广告，swf/图片/视频，多个用竖线隔开，图片和视频要加链接地址
+      r:'',//前置广告的链接地址，多个用竖线隔开，没有的留空
+      t:'',//视频开始前播放swf/图片时的时间，多个用竖线隔开
+      y:'',//这里是使用网址形式调用广告地址时使用，前提是要设置l的值为空
+      z:'',//缓冲广告，只能放一个，swf格式
+      e:'1',//视频结束后的动作，0是调用js函数，1是循环播放，2是暂停播放并且不调用广告，3是调用视频推荐列表的插件，4是清除视频流并调用js功能和1差不多，5是暂停播放并且调用暂停广告
+      v:'80',//默认音量，0-100之间
+      p:'0',//视频默认0是暂停，1是播放，2是不加载视频
+      h:'0',//播放http视频流时采用何种拖动方法，=0不使用任意拖动，=1是使用按关键帧，=2是按时间点，=3是自动判断按什么(如果视频格式是.mp4就按关键帧，.flv就按关键时间)，=4也是自动判断(只要包含字符mp4就按mp4来，只要包含字符flv就按flv来)
+      q:'',//视频流拖动时参考函数，默认是start
+      m:'',//让该参数为一个链接地址时，单击播放器将跳转到该地址
+      o:'',//当p=2时，可以设置视频的时间，单位，秒
+      w:'',//当p=2时，可以设置视频的总字节数
+      g:'',//视频直接g秒开始播放
+      j:'',//跳过片尾功能，j>0则从播放多少时间后跳到结束，<0则总总时间-该值的绝对值时跳到结束
+      k:'',//提示点时间，如 30|60鼠标经过进度栏30秒，60秒会提示n指定的相应的文字
+      n:'',//提示点文字，跟k配合使用，如 提示点1|提示点2
+      wh:'',//宽高比，可以自己定义视频的宽高或宽高比如：wh:'4:3',或wh:'1080:720'
+      lv:'0',//是否是直播流，=1则锁定进度栏
+      loaded:''//当播放器加载完成后发送该js函数loaded
+      //调用播放器的所有参数列表结束
+    };
+    var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
+    //wmode:'transparent' 或 'opaque'，解决播放器遮挡网页内容问题。
+    var video=['http://movie.ks.js.cn/flv/other/1_0.mp4->video/mp4','http://www.ckplayer.com/webm/0.webm->video/webm','http://www.ckplayer.com/webm/0.ogv->video/ogg'];
+    CKobject.embed('ckplayer/ckplayer.swf','a1','ckplayer_a1','480','320',false,flashvars,video,params);
+    /*CKobject.embedSWF(播放器路径,容器id,播放器id/name,播放器宽,播放器高,flashvars的值,其它定义也可省略);*/
+    //开关灯
+    var box = new LightBox();
+
+    function closelights(){//关灯
+      box.Show();
+      CKobject._K_('a1').style.width='770px';
+      CKobject._K_('a1').style.height='450px';
+      CKobject.getObjectById('ckplayer_a1').width=770;
+      CKobject.getObjectById('ckplayer_a1').height=450;
+    };
+    function openlights(){//开灯
+      box.Close();
+      CKobject._K_('a1').style.width='480px';
+      CKobject._K_('a1').style.height='320px';
+      CKobject.getObjectById('ckplayer_a1').width=480;
+      CKobject.getObjectById('ckplayer_a1').height=320;
+    };
+    //调用ckplayer的flash播放器结束
+    </script>
+    <!--视频结束-->
+    <!--幻灯片开始-->
+    <div class="play-c-s" id="play">
+      <ul class="play-c-s-b">
+        <a href="javascript:;" class="play-m play-ml"></a>
+        <a href="javascript:;" class="play-m play-mr"></a>
+        <div class="play-al"></div>
+        <div class="play-ar"></div>
+        <li style="z-index:1601;">
+          <a href="#"><img alt="" src="images/slide-0.jpg" width="500" height="245" /></a>
+          <p class="ks-text-overflow">城市夜景城市夜景城市夜景城市夜景城市夜景城市夜景城市夜景城市夜景</p>
+        </li>
+        <li>
+          <a href="#"><img alt="" src="images/slide-1.jpg" width="500" height="245" /></a>
+          <p class="ks-text-overflow">山峰</p>
+        </li>
+        <li>
+          <a href="#"><img alt="" src="images/slide-2.jpg" width="500" height="245" /></a>
+          <p class="ks-text-overflow">云海</p>
+        </li>
+        <li>
+          <a href="#"><img alt="" src="images/slide-3.jpg" width="500" height="245" /></a>
+          <p class="ks-text-overflow">长发少女</p>
+        </li>
+        <li>
+          <a href="#"><img alt="" src="images/slide-4.jpg" width="500" height="245" /></a>
+          <p class="ks-text-overflow">双胞胎</p>
+        </li>
+        <li>
+          <a href="#"><img alt="" src="images/slide-5.jpg" width="500" height="245" /></a>
+          <p class="ks-text-overflow">职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性职场女性</p>
+        </li>
+      </ul>
+      <div class="play-c-s-s">
+        <p class="play-sl">&lt;</p>
+        <p class="play-sr">&gt;</p>
+        <ul>
+          <li class="play-sa"><img alt="" src="images/slide-s0.jpg" width="105" height="64" /></li>
+          <li><img alt="" src="images/slide-s1.jpg" width="105" height="64" /></li>
+          <li><img alt="" src="images/slide-s2.jpg" width="105" height="64" /></li>
+          <li><img alt="" src="images/slide-s3.jpg" width="105" height="64" /></li>
+          <li><img alt="" src="images/slide-s4.jpg" width="105" height="64" /></li>
+          <li><img alt="" src="images/slide-s5.jpg" width="105" height="64" /></li>
+        </ul>
+      </div>
+    </div>
+    <!--幻灯片结束-->
+  </div>
+</div>
+<div class="ks-clear container content2">
+  <div class="content-s">
+    <div class="content-s-l" id="hotLab">
+      <div class="ks-clear content-s-l-ti">
+        <p><a href="首页-标签列表页.html">更多&gt;&gt;</a></p>
+        <span>热门标签</span>
+      </div>
+      <div class="content-s-lc">
+        <p style="display:block;">
+          <a href="首页-标签搜索结果页.html">古代艺术</a><a href="#">地理知识</a><a href="#">教学</a><a href="#">历史</a><a href="#">超载机</a><a href="#">摩天轮</a><a href="#">地中海</a><a href="#">古代艺术</a><a href="#">地理知识</a><a href="#">教学</a><a href="#">历史</a><a href="#">超载机</a><a href="#">摩天轮</a><a href="#">地中海</a><a href="#">古代艺术</a><a href="#">地理知识</a><a href="#">教学</a>
+        </p>
+        <p>
+          <a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a><a href="#">古代艺术</a>
+        </p>
+        <p>
+          <a href="#">教学</a><a href="#">教学</a><a href="#">教学</a><a href="#">教学</a><a href="#">教学</a>
+        </p>
+      </div>
+      <p class="content-s-l-btn">
+        <a href="javascript:;" class="icon-left" hidefocus=""></a><i></i><a href="javascript:;" class="icon-right" hidefocus=""></a>
+      </p>
+    </div>
+    <div class="content-s-l" id="hotTop">
+      <div class="ks-clear content-s-h-ti">
+        <p>
+          <a href="javascript:;" class="content-s-h-ti-a" hideFocus>总</a> | <a href="javascript:;" hideFocus>周</a> | <a href="javascript:;" hideFocus>月</a>
+        </p>
+        <span>热度排行</span>
+      </div>
+      <div class="content-s-h-c">
+        <ol class="content-s-h-l" style="display:block;">
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">如何迅速建设自己的网站</a></li>
+          <li class="ks-text-overflow"><a href="#">2014省考常识判断模块精讲</a></li>
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">如何迅速建设自己的网站</a></li>
+          <li class="ks-text-overflow"><a href="#">2014省考常识判断模块精讲</a></li>
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+        </ol>
+        <ol class="content-s-h-l">
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">如何迅速建设自己的网站</a></li>
+          <li class="ks-text-overflow"><a href="#">2014省考常识判断模块精讲</a></li>
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">如何迅速建设自己的网站</a></li>
+          <li class="ks-text-overflow"><a href="#">2014省考常识判断模块精讲</a></li>
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术</a></li>
+        </ol>
+        <ol class="content-s-h-l">
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">如何迅速建设自己的网站</a></li>
+          <li class="ks-text-overflow"><a href="#">2014省考常识判断模块精讲</a></li>
+          <li class="ks-text-overflow"><a href="#">公元400年前的古代艺术</a></li>
+          <li class="ks-text-overflow"><a href="#">JAVA SE视频教程</a></li>
+          <li class="ks-text-overflow"><a href="#">如何迅速建设自己的网站</a></li>
+          <li class="ks-text-overflow"><a href="#">2014省考常识判断模块精讲</a></li>
+        </ol>
+      </div>
+    </div>
+    <div class="content-s-he">
+    <a href="首页-方案定制.html"></a>
+    <p class="content-s-he-te">400 - 636 -7670</p>
+    </div>
+    <div class="content-s-v">
+      <div class="ks-clear content-s-l-ti">
+      <p><a href="#">更多&gt;&gt;</a></p>
+      <span>他们都在看</span>
+      </div>
+      <div class="ks-clear content-s-v-e">
+      <p>
+      <a href="#">Funlolaaaaaaaa</a> 刚刚观看了 <a href="#">欧洲春季赛精彩回顾一欧洲春季赛精彩回顾一</a>
+      </p>
+      <a href="#"><img alt="" src="images/headpic.jpg" width="32" height="32"></a>
+      </div>
+      <div class="ks-clear content-s-v-e">
+      <p>
+      <a href="#">LovejyForSc2</a> 刚刚观看了 <a href="#">吸睛！丁俊
+晖高难度清台 决赛将战奥沙利文</a>
+      </p>
+      <a href="#"><img alt="" src="images/headpic-2.jpg" width="32" height="32"></a>
+      </div>
+      <div class="ks-clear content-s-v-e">
+      <p>
+      <a href="#">Funlol</a> 刚刚观看了 <a href="#">LCS 欧洲春季赛W7D2 精彩回顾</a>
+      </p>
+      <a href="#"><img alt="" src="images/headpic.jpg" width="32" height="32"></a>
+      </div>
+      <div class="ks-clear content-s-v-e">
+      <p>
+      <a href="#">LovejyForSc2</a> 刚刚观看了 <a href="#">吸睛！丁俊
+晖高难度清台 决赛将战奥沙利文</a>
+      </p>
+      <a href="#"><img alt="" src="images/headpic-2.jpg" width="32" height="32"></a>
+      </div>
+      <div class="ks-clear content-s-v-e">
+      <p>
+      <a href="#">Funlol</a> 刚刚观看了 <a href="#">LCS 欧洲春季赛W7D2 精彩回顾</a>
+      </p>
+      <a href="#"><img alt="" src="images/headpic.jpg" width="32" height="32"></a>
+      </div>
+      <div class="ks-clear content-s-v-e">
+      <p>
+      <a href="#">LovejyForSc2</a> 刚刚观看了 <a href="#">吸睛！丁俊
+晖高难度清台 决赛将战奥沙利文</a>
+      </p>
+      <a href="#"><img alt="" src="images/headpic-2.jpg" width="32" height="32"></a>
+      </div>
+    </div>
+  </div>
+  <div class="content-m">
+    <div class="content-m-c">
+      <div class="ks-clear content-m-c-ti">
+        <p><a href="#">更多&gt;&gt;</a></p>
+        <span class="content-m-c-ti-h">动画课堂</span><span class="content-m-c-ti-s">将动画情景应用到课堂教学，有利于提升教学质量</span>
+      </div>
+      <div class="ks-clear content-m-c-c">
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">公元400年前的古代艺术</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2.1万</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>1,299</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-2.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">视频教程视频教程视频教程视频教程视频教程视频教程视频教程视频教程视频教程</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2.1万</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>1,299</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">如何迅速建设自己的网站</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>21</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>9</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-4.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">2014省考常识判断模块精讲</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2万</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>199</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-3.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">公元400年前的古代艺术</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2,345</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>32</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>19</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-2.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">JAVA SE视频教程</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>21</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>1,299</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic.jpg" width="160" height="120"></a>
+        </div>
+      </div>
+    </div>
+    <div class="content-m-c">
+      <div class="ks-clear content-m-c-ti">
+        <p><a href="#">更多&gt;&gt;</a></p>
+        <span class="content-m-c-ti-h">趣味生活</span><span class="content-m-c-ti-s">记录发生在校园的有关友情、冒险、搞笑等众多精彩事件</span>
+      </div>
+      <div class="ks-clear content-m-c-c">
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">公元400年前的古代艺术</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2.1万</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>1,299</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-2.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">视频教程视频教程视频教程视频教程视频教程视频教程视频教程视频教程视频教程</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2.1万</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>1,299</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">如何迅速建设自己的网站</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>21</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>9</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-4.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">2014省考常识判断模块精讲</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2万</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>199</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-3.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">公元400年前的古代艺术</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>2,345</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>32</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>19</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic-2.jpg" width="160" height="120"></a>
+        </div>
+        <div class="content-m-c-r-e">
+          <div class="content-m-c-r-e-w">
+            <a href="#">JAVA SE视频教程</a>
+            <div class="content-m-c-r-e-k">类型：作品欣赏</div>
+            <div class="content-m-c-r-e-i">
+              <p title="播放次数" class="cartoon-m-l-e-r-p"><i class="icon-play"></i> <span>21</span></p>
+              <p title="收藏" class="favorite-h" style="_padding-top:4px;"><i class="icon-favorite"></i> <span>3,222</span></p>
+              <p title="赞" class="nice-h"><i class="icon-nice"></i> <span>1,299</span></p>
+            </div>
+          </div>
+          <a href="#"><img alt="" src="images/video-pic.jpg" width="160" height="120"></a>
+        </div>
+      </div>      
+    </div> 
+    <div class="content-m-s">
+      <div class="ks-clear content-m-c-ti">
+        <p><a href="#">更多&gt;&gt;</a></p>
+        <span class="content-m-c-ti-h">软件培训</span><span class="content-m-c-ti-s">软件培训教程分为掌握单个技能培训的课程和针对技能不同水平设置的课程</span>
+      </div>   
+      <div class="ks-clear content-m-s-c">
+        <div>
+        <a href="#"><img alt="" src="images/software.jpg" width="160" height="120"></a>
+        <a href="#">初级教程初级教程初级教程初级教程初级教程初级教程</a>
+        </div>
+        <div>
+        <a href="#"><img alt="" src="images/software-2.jpg" width="160" height="120"></a>
+        <a href="#">中级教程</a>
+        </div>
+        <div>
+        <a href="#"><img alt="" src="images/software-3.jpg" width="160" height="120"></a>
+        <a href="#">高级教程</a>
+        </div>
+        <div>
+        <a href="#"><img alt="" src="images/software-4.jpg" width="160" height="120"></a>
+        <a href="#">专业教程</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ads">
+<div class="ks-clear ads-c">
+  <div>
+  <p>软件应用简单，三分钟即可生成一个作品</p>
+  软件应用简单，三分钟即可生成一个作品。软件应用简单，三分钟即可生成一个作品。软件应用简单，三分钟即可生成一个作品。软件应用简单，三分钟即可生成一个作品。
+  </div>
+  <div class="ads-c-c">
+  <p>我们提供上千个不同学段优质的动画课件</p>
+  我们提供上千个不同学段优质的动画课件，我们提供上千个不同学段优质的动画课件，我们提供上千个不同学段优质的动画课件，我们提供上千个不同学段优质的动画。
+  </div>
+  <div class="ads-c-r">
+  <p>作品配套教程帮您快速上手制作动画</p>
+  作品配套教程帮您快速上手制作动画，作作品配套教程帮您快速上手制作动画，品配套教程帮您快速上手制作动画，作品配套教程帮您快速上手制作动画。
+  </div>
+  </div>
+</div>
+<div class="foot">
+  <div class="foot-to">
+    <div class="foot-to-c">
+    <p class="foot-to-c-te"><img alt="" src="images/icon-telephone2-8.png" width="40" height="35"> <span>400 - 636 -7670</span></p>
+    <div class="ks-clear">
+    <p class="foot-to-c-p">支付宝<br>
+保障交易</p>
+    <p class="foot-to-c-u">有效期内<br>
+不限时反复学</p>
+    <p class="foot-to-c-s">7*13小时<br>
+客服热线</p>
+    <p class="foot-to-c-q">十年教研<br>
+质量保证</p>
+    <p class="foot-to-c-tr">高清课程<br>
+免费试学</p>
+    <p class="foot-to-c-a">助教老师<br>
+免费答疑</p>
+    </div>
+    </div>
+  </div>
+  <div class="foot-b">
+  <a href="#">关于我们</a><span>|</span><a href="#">联系我们</a><span>|</span><a href="#">意见反馈</a><span>|</span><a href="#">法律声明</a>
+  </div>
+</div>
+<!--悬浮菜单开始-->
+<div class="menu" id="menuF">
+  <a href="#" class="ks-hide-text icon-consult">在线咨询</a>
+  <a href="首页-用户反馈.html" class="ks-hide-text icon-feedback">反馈</a>
+  <a href="javascript:;" class="ks-hide-text icon-top" hidefocus="">回顶部</a>
+</div>
+<!--悬浮菜单结束-->
+</body>
+</html>
