@@ -322,7 +322,7 @@ myAddEvent(window,'load',function(){
     <script type="text/javascript" src="ckplayer/ckplayer.js" charset="utf-8"></script>
     <script type="text/javascript">
     var flashvars={
-      f:'http://movie.ks.js.cn/flv/other/1_0.flv',//视频地址
+      f:'video/career.mp4',//视频地址
       a:'',//调用时的参数，只有当s>0的时候有效
       s:'0',//调用方式，0=普通方法（f=视频地址），1=网址形式,2=xml形式，3=swf形式(s>0时f=网址，配合a来完成对地址的组装)
       c:'0',//是否读取文本配置,0不是，1是
@@ -352,9 +352,21 @@ myAddEvent(window,'load',function(){
       loaded:''//当播放器加载完成后发送该js函数loaded
       //调用播放器的所有参数列表结束
     };
-    var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
+
+    var params={
+      bgcolor:'#FFF',
+      allowFullScreen:true,
+      allowScriptAccess:'always',
+      wmode:'transparent'
+    };
     //wmode:'transparent' 或 'opaque'，解决播放器遮挡网页内容问题。
-    var video=['http://movie.ks.js.cn/flv/other/1_0.mp4->video/mp4','http://www.ckplayer.com/webm/0.webm->video/webm','http://www.ckplayer.com/webm/0.ogv->video/ogg'];
+
+    var video=[
+      'video/career.mp4->video/mp4',
+      'http://www.ckplayer.com/webm/0.webm->video/webm',
+      'http://www.ckplayer.com/webm/0.ogv->video/ogg'
+    ];
+
     CKobject.embed('ckplayer/ckplayer.swf','a1','ckplayer_a1','480','320',false,flashvars,video,params);
     /*CKobject.embedSWF(播放器路径,容器id,播放器id/name,播放器宽,播放器高,flashvars的值,其它定义也可省略);*/
     //开关灯
